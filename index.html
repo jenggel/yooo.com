@@ -1,0 +1,95 @@
+<!doctype html>
+<!-- Single-Image-Website.html
+     Cara pakai: ganti nilai src pada <img> ke nama file gambar Anda (mis. "foto.jpg")
+     atau URL lengkap (mis. "https://example.com/foto.jpg").
+-->
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hanya 1 Gambar</title>
+  <style>
+    /* Reset sederhana */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+
+    /* Container yang menengahkan gambar */
+    body{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: linear-gradient(180deg,#eef2ff 0%, #f8fafc 100%);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Gambar responsif, maksimal memenuhi layar tanpa terpotong */
+    img#mainImage{
+      max-width:100%;
+      max-height:100vh;
+      width:auto;
+      height:auto;
+      display:block;
+      object-fit:contain;
+      border-radius:12px;
+      box-shadow:0 8px 30px rgba(2,6,23,0.08);
+      transition:transform .25s ease, box-shadow .25s ease;
+      cursor:pointer;
+    }
+    img#mainImage:hover{ transform:scale(1.02); box-shadow:0 12px 36px rgba(2,6,23,0.12)}
+
+    /* Teks kecil di bawah (opsional) */
+    .caption{
+      position:fixed;
+      bottom:18px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:13px;
+      color:#475569;
+      background:rgba(255,255,255,0.7);
+      padding:6px 10px;
+      border-radius:999px;
+      backdrop-filter:blur(6px);
+      box-shadow:0 2px 8px rgba(2,6,23,0.06);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ganti src ke file gambar Anda atau URL gambar -->
+  <img id="mainImage" src="l.jpeg" alt="Gambar tunggal" loading="lazy" />
+
+  <!-- Keterangan opsional, hapus jika tidak perlu -->
+
+  <script>
+    // Klik gambar -> fullscreen (jika didukung browser)
+    const img = document.getElementById('mainImage');
+    img.addEventListener('click', async () => {
+      const el = img;
+      try{
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        } else if (el.requestFullscreen) {
+          await el.requestFullscreen();
+        } else if (el.webkitRequestFullscreen) { // Safari
+          el.webkitRequestFullscreen();
+        }
+      }catch(e){
+        console.warn('Fullscreen tidak tersedia:', e);
+      }
+    });
+
+    // Jika ingin menampilkan gambar lewat query string ?img=URL
+    (function(){
+      try{
+        const params = new URLSearchParams(location.search);
+        const q = params.get('img');
+        if(q){
+          img.src = q;
+        }
+      }catch(e){/* ignore */}
+    })();
+  </script>
+</body>
+</html>
